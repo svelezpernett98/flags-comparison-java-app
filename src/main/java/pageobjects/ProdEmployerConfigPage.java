@@ -46,28 +46,8 @@ public class ProdEmployerConfigPage {
 		return driver.findElement(productInput);
 	}
 	
-//	public void getTableLenght(WebDriver driver){
-//		tableElement = driver.findElement(By.id("dimensionTools"));
-//		rows = tableElement.findElements(By.tagName("tr"));
-//		System.out.println("length:" + rows.size());
-//	}
-//	
-//	public void getProdHashMapWithValues(WebDriver driver){
-//		prodFlagValuelinkedHashMap = new LinkedHashMap<>();
-//		for (int i = 1; i < rows.size() + 1; i++) {
-//			  System.out.println(i);
-//			  try {                                                       //*[@id="DKDV"]
-//			  prodFlagValuelinkedHashMap.put(driver.findElement(By.xpath("/html/body/div[17]/div[2]/div[3]/div[6]/table/tbody/tr[" + i + "]/td[1]")).getText(), driver.findElement(By.xpath("/html/body/div[17]/div[2]/div[3]/div[6]/table/tbody/tr[" + i + "]/td[2]")).getText());
-//			  }catch(Exception e) {
-//				  e.printStackTrace();
-//			  }
-//			}
-//		System.out.println(prodFlagValuelinkedHashMap);
-//		System.out.println("prod hasmap size: " + prodFlagValuelinkedHashMap.size());
-//	}
-	
-	
-	
+
+	//See description of this method at AppTest.java
 	public void getProdHashMapWithValues(WebDriver driver) {
 		prodFlagValuelinkedHashMap = new LinkedHashMap<>();
 		// Find all <tr> elements in the table
@@ -83,13 +63,12 @@ public class ProdEmployerConfigPage {
 	        
 	        
 	        if (row.isDisplayed()) {
-	            // Your code to process the visible row
-	        	// Process the 1st and 2nd <td> elements
+	        	// Process the 1st and 2nd <td> element
 	            if (cells.size() >= 2) {
 	                WebElement flagName = cells.get(0);
 	                WebElement flagValue = cells.get(1);
 
-	                // Your code to process the 1st and 2nd cells
+	                // Process the 1st and 2nd cell
 	                try {
 	                	prodFlagValuelinkedHashMap.put(flagName.getText(), flagValue.getText());
 	                }
