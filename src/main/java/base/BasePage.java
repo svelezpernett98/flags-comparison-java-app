@@ -41,12 +41,14 @@ public class BasePage {
 	public Map<String, List<String>> multiValueMapForComparison = new LinkedHashMap<>();
 
 	public BasePage() throws IOException {
+		//Gets the data from config.properties, and loads it into prop
 		prop = new Properties();
 		FileInputStream data = new FileInputStream(
 				System.getProperty("user.dir") + "\\src\\main\\java\\resources\\config.properties");
 		prop.load(data);
 	}
 
+	//Based on the browser set in config.properties, it initializes the desired WebDriver (Only Chrome is supperted, because it is the only web driver I've downloaded at the moment)
 	public WebDriver getDriver() {
 		if (prop.getProperty("browser").equals("chrome")) {
 			System.setProperty("webdriver.chrome.driver",
@@ -67,45 +69,53 @@ public class BasePage {
 			driver = new EdgeDriver();
 		}
 
+		//Window will start maximized
 		driver.manage().window().maximize();
 
 		// Implicit wait:
 //		driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
 
-		// Explicit wait:
+		// Explicit wait, in case it will be needed:
 		wait = new WebDriverWait(driver, 100);
 
 		return driver;
 	}
 
+	//Returns variables from config.properties:
 	public String getUsername() {
 		return prop.getProperty("username");
 	}
 
+	//Returns variables from config.properties:
 	public String getPassword() {
 		return prop.getProperty("password");
 	}
 
+	//Returns variables from config.properties:
 	public String getProdUrl() {
 		prodUrl = prop.getProperty("prodUrl");
 		return prodUrl;
 	}
 
+	//Returns variables from config.properties:
 	public String getStageUrl() {
 		stageUrl = prop.getProperty("stageUrl");
 		return stageUrl;
 	}
 
+	//Returns variables from config.properties:
 	public String getTestUrl() {
 		testUrl = prop.getProperty("testUrl");
 		return testUrl;
 	}
 
+	//Returns variables from config.properties:
 	public String[] getJHBranchesArray() {
 		jhBranchesArray = prop.getProperty("JHbranches").split(",");
 		return jhBranchesArray;
 	}
 
+	//See description of this method at AppTest.java
 	public void compareHashmaps(Map<String, String> mapProd, Map<String, String> mapStage,
 			Map<String, String> mapTest) {
 		for (Map.Entry<String, String> entry : mapProd.entrySet()) {
@@ -167,6 +177,7 @@ public class BasePage {
 
 	}
 
+	//See description of this method at AppTest.java
 	public void createWorksheet() {
 		// Specify the file path where you want to save the Excel file
 		String filePath = System.getProperty("user.dir") + "\\src\\main\\java\\resources\\worksheet.xlsx";
@@ -182,6 +193,7 @@ public class BasePage {
 
 	}
 
+	//See description of this method at AppTest.java
 	public void addSheet(String branchName) {
 		String filePath = System.getProperty("user.dir") + "\\src\\main\\java\\resources\\worksheet.xlsx";
 
@@ -190,11 +202,11 @@ public class BasePage {
 			// Create a new sheet
 			XSSFSheet sheet = workbook.createSheet(branchName);
 
-			// Modify the new sheet as needed (e.g., add rows and cells)
+			// Modify the new sheet as needed
 			// create cell style
 			XSSFCellStyle yellowCellStyle = workbook.createCellStyle();
-			yellowCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex()); // Set the background color to
-																						// yellow
+			yellowCellStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex()); // Set the background color to yellow for the roes where entry contains 'isNotEqual'
+																						
 			yellowCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
 
 			XSSFCellStyle boldStyle = workbook.createCellStyle();
@@ -230,6 +242,7 @@ public class BasePage {
 				}
 			}
 
+			//Creation of the 2nd table with flags that are in PROD, and not in STAGE
 			XSSFRow secondTableFirstRow = sheet.createRow(multiValueMapForComparison.size() + 2);
 			secondTableFirstRow.createCell(0).setCellValue("Flags not displayed for Stage");
 			secondTableFirstRow.createCell(1).setCellValue("Value in prod");
@@ -243,11 +256,8 @@ public class BasePage {
 				row.createCell(1).setCellValue(value);
 			}
 
-			// Write the workbook content to the Excel file
-//                workbook.write(fileOut);
-//                System.out.println("Excel file created successfully at: " + filePath);
 
-//              test table with flags not displayed in prod
+			//Creatio of the 3rd table with flags that are in PROD, and not in TEST
 			XSSFRow thirdTableFirstRow = sheet
 					.createRow(multiValueMapForComparison.size() + flagsNotDisplayedForStage.size() + 4);
 			thirdTableFirstRow.createCell(0).setCellValue("Flags not displayed for Test");
